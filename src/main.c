@@ -2,7 +2,7 @@
 
 // Código feito por:
 // Philip William -- Código solarimétrico e do RTC
-// Anita Cunha, Yara Rodrigues -- Código dos servomotores
+// Anita Cunha, Yara Rodrigues e Alexander Oliveira -- Código dos servomotores
 
 // PASSOS LÓGICOS PARA O TRACKER FUNCIONAR
 // 1. Inicializar os hardwares relevantes
@@ -69,8 +69,8 @@ const struct device *rtc = DEVICE_DT_GET(DS1307_NODE);
 
 void definir_servo_angulo(float angulo){
     uint16_t valor_cnv = 0;
-    uint16_t cnv_min = 0.02f * SERVO_PERIODO_TPM_MODULO;
-    uint16_t cnv_max = 0.12f * SERVO_PERIODO_TPM_MODULO;
+    uint16_t cnv_min = 135;
+    uint16_t cnv_max = 890;
 
     if (angulo < 0.0f) angulo = 0.0f;
     if (angulo > 180.0f) angulo = 180.0f;
@@ -86,14 +86,14 @@ int main(void){
     pwm_tpm_Ch_Init(TPM1, 0, TPM_PWM_H, GPIOE, 20);
     printk("Sistema do tracker solar inicializado.\n");
 
-    uint16_t tick = 150;
+    uint16_t tick = 135;
     pwm_tpm_CnV(TPM1,0,tick);
     k_msleep(5000);
-    for(tick = 150; tick < 954; tick += 6){
+    for(tick = 135; tick < 890; tick += 5){
         pwm_tpm_CnV(TPM1,0,tick);
         k_msleep(20);
     }
-    for(tick = 954; tick > 150; tick -= 6){
+    for(tick = 890; tick > 135; tick -= 5){
         pwm_tpm_CnV(TPM1,0,tick);
         k_msleep(20);
     }
